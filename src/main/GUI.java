@@ -3,14 +3,15 @@ package main;
 /*
  * PLAYLIST - SEGUNDA ENTREGA
  * 
- * DUPLA: AMANDA ALVES GUIMARÃES (aag) e ISABELA MARINHO RIBEIRO (imr)
+ * DUPLA: AMANDA ALVES GUIMARï¿½ES (aag) e ISABELA MARINHO RIBEIRO (imr)
+ * Contribuidor: Eduardo Programador (https://eduardoprogramador.com)
  * 
- * OBSERVAÇÕES:
- * - Quando uma música acaba de ser executada, não avançamos automaticamente para a próxima música. Permanecemos na mesma música e,
- * para executá-la novamente, é preciso pressionar o botão PLAY 2x.
- * - Para executar uma nova música, após pressionar ANTERIOR/PRÓXIMO, é necessário pressionar o botão PLAY.
- * - A playlist só é exibida após pressionar o botão EXIBIR PLAYLIST ATUALIZADA.
- * - Não será possível remover uma música que está sendo executada
+ * OBSERVAï¿½ï¿½ES:
+ * - Quando uma mï¿½sica acaba de ser executada, nï¿½o avanï¿½amos automaticamente para a prï¿½xima mï¿½sica. Permanecemos na mesma mï¿½sica e,
+ * para executï¿½-la novamente, ï¿½ preciso pressionar o botï¿½o PLAY 2x.
+ * - Para executar uma nova mï¿½sica, apï¿½s pressionar ANTERIOR/PRï¿½XIMO, ï¿½ necessï¿½rio pressionar o botï¿½o PLAY.
+ * - A playlist sï¿½ ï¿½ exibida apï¿½s pressionar o botï¿½o EXIBIR PLAYLIST ATUALIZADA.
+ * - Nï¿½o serï¿½ possï¿½vel remover uma mï¿½sica que estï¿½ sendo executada
  */
 
 import java.awt.event.ActionEvent;
@@ -42,7 +43,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class GUI implements ActionListener, ListSelectionListener, FocusListener {
 	
-	//botões
+	//botï¿½es
 	private JButton addButton;
 	private JButton remButton;
 	private JButton playpauseButton;
@@ -50,6 +51,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 	private JButton backButton;
 	private JButton showButton;
 	private JButton	shuffleButton;
+	private JButton stopButton;
 	
 	//labels
 	private JLabel msg_mscExecutada;
@@ -69,23 +71,24 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 	//barra de progresso
 	private JProgressBar musicaExecucao;
 	
-	//variáveis para auxiliar no controle de algumas funcionalidades
+	//variï¿½veis para auxiliar no controle de algumas funcionalidades
 	private boolean deleteArtistText = true; //controle do texto informativo dentro da caixa do input do nome do artista
-	private boolean deleteSongText = true; //controle do texto informativo dentro da caixa do input do nome da música
-	private boolean deleteIndexText = true; //controle do texto informativo dentro da caixa do input do número do index
-	private boolean deleteDuracaoMusica = true; //controle do texto informativo dentro da caixa do input da duração da música
+	private boolean deleteSongText = true; //controle do texto informativo dentro da caixa do input do nome da mï¿½sica
+	private boolean deleteIndexText = true; //controle do texto informativo dentro da caixa do input do nï¿½mero do index
+	private boolean deleteDuracaoMusica = true; //controle do texto informativo dentro da caixa do input da duraï¿½ï¿½o da mï¿½sica
 	private boolean play = false; //interrompe loop dentro da thread play/pause
-	private boolean playagain = false; //checa se a música acabou para reiniciar a barra de progresso e variáveis para a execução da música
-	private boolean novaMusica = true; //reinicia barra de progresso e execução da música
-	private boolean isShuffle = false; //informa se a lista está no modo aleatório
+	private boolean playagain = false; //checa se a mï¿½sica acabou para reiniciar a barra de progresso e variï¿½veis para a execuï¿½ï¿½o da mï¿½sica
+	private boolean novaMusica = true; //reinicia barra de progresso e execuï¿½ï¿½o da mï¿½sica
+	private boolean isShuffle = false; //informa se a lista estï¿½ no modo aleatï¿½rio
 	
-	private int counter1 = 0; //counter para controlar se a música acabou
-	private int msc_atual = -1; //índice da música atual.
+	private int counter1 = 0; //counter para controlar se a mï¿½sica acabou
+	private int msc_atual = -1; //ï¿½ndice da mï¿½sica atual.
 	private int tamanho_msc_atual = 0; //em segundos
 	
 	private Playlist playlist;
 	
 	private Lock lock = new ReentrantLock();
+
 	private Condition inUse = lock.newCondition();
 	private Condition notInUse = lock.newCondition();
 	
@@ -96,28 +99,28 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		playlist = new Playlist();
 		
 		
-		//lista de músicas (modo de exibição)
+		//lista de mï¿½sicas (modo de exibiï¿½ï¿½o)
 		lista_musicas = new JTextArea();
 		lista_musicas.setBounds(142, 120, 1118, 310);
 		
 		
-		//botões
-		addButton = new JButton("Adicionar Música");
+		//botï¿½es
+		addButton = new JButton("Adicionar Mï¿½sica");
 		addButton.addActionListener(this);
 		addButton.setActionCommand("add_act");
 		addButton.setBounds(502, 50, 150, 30);
 		
-		remButton = new JButton("Remover Música");
+		remButton = new JButton("Remover Mï¿½sica");
 		remButton.addActionListener(this);
 		remButton.setActionCommand("rem_act");
 		remButton.setBounds(920, 50, 150, 30);
 		
-		playpauseButton = new JButton("PLAY"); //muda para pause após ter pressionado o play
+		playpauseButton = new JButton("PLAY"); //muda para pause apï¿½s ter pressionado o play
 		playpauseButton.addActionListener(this);
 		playpauseButton.setActionCommand("playpause_act");
 		playpauseButton.setBounds(604, 500, 200, 40);
 		
-		nextButton = new JButton("PRÓXIMA");
+		nextButton = new JButton("PRï¿½XIMA");
 		nextButton.addActionListener(this);
 		nextButton.setActionCommand("next_act");
 		nextButton.setBounds(900, 500, 100, 40); //tava 1060
@@ -130,9 +133,14 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		showButton = new JButton("Exibir playlist atualizada");
 		showButton.addActionListener(this);
 		showButton.setActionCommand("show_act");
-		showButton.setBounds(1090, 50, 180, 30);
+		showButton.setBounds(1090, 550, 180, 30);
+
+		stopButton = new JButton("Parar");
+		stopButton.addActionListener(this);
+		stopButton.setActionCommand("stop_act");
+		stopButton.setBounds(605,580,200,40);
 		
-		shuffleButton = new JButton("Modo aleatório OFF");
+		shuffleButton = new JButton("Modo aleatï¿½rio OFF");
 		shuffleButton.addActionListener(this);
 		shuffleButton.setActionCommand("shuffle_act");
 		shuffleButton.setBounds(1100, 500, 150, 40);
@@ -163,7 +171,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		nomeMusica.setVisible(true);
 		nomeMusica.addActionListener(this);
 		nomeMusica.setEditable(true);
-		nomeMusica.setText("Música");
+		nomeMusica.setText("Mï¿½sica");
 		nomeMusica.addFocusListener(this);
 		nomeMusica.setBounds(142, 50, 100, 30);
 		
@@ -173,7 +181,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		indexMusica.setVisible(true);
 		indexMusica.addActionListener(this);
 		indexMusica.setEditable(true);
-		indexMusica.setText("Número da música para remover");
+		indexMusica.setText("Nï¿½mero da mï¿½sica para remover");
 		indexMusica.addFocusListener(this);
 		indexMusica.setBounds(702, 50, 200, 30);
 		
@@ -183,7 +191,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		duracaoMusica.setVisible(true);
 		duracaoMusica.addActionListener(this);
 		duracaoMusica.setEditable(true);
-		duracaoMusica.setText("Duração");
+		duracaoMusica.setText("Duraï¿½ï¿½o");
 		duracaoMusica.addFocusListener(this);
 		duracaoMusica.setBounds(382, 50, 100, 30);
 		
@@ -200,7 +208,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		
 		msg_instrucoes = new JLabel();
 		msg_instrucoes.setBounds(142, 550, 1118, 15);
-		msg_instrucoes.setText("Ao final de uma música, para executá-la novamente, clique 2x em PLAY. Após avançar/voltar uma música, é necessário pressionar PLAY para que ela execute.");
+		msg_instrucoes.setText("Ao final de uma mï¿½sica, para executï¿½-la novamente, clique 2x em PLAY. Apï¿½s avanï¿½ar/voltar uma mï¿½sica, ï¿½ necessï¿½rio pressionar PLAY para que ela execute.");
 		
 		
 		//panel
@@ -222,6 +230,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 		panel.add(msg_instrucoes);
 		panel.add(showButton);
 		panel.add(shuffleButton);
+		panel.add(stopButton);
 		
 		
 		//frame
@@ -244,7 +253,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		if (command.equals("add_act")) { //adicionar uma música
+		if (command.equals("add_act")) { //adicionar uma mï¿½sica
 			msg_formatoTempo.setText("Formato: x.y, onde x = minuto(s) e y = segundo(s)");
 			String nome_musica = nomeMusica.getText();
 			String nome_artista = nomeArtista.getText();
@@ -252,9 +261,9 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 			try {
 				double duracao_msc = Double.parseDouble(duracaoMusica.getText());
 				if (duracao_msc <= 0) {
-					msg_formatoTempo.setText("Sem números negativos!");
+					msg_formatoTempo.setText("Sem nï¿½meros negativos!");
 				} else if (playlist.getCurrSize() == 1000) {
-					msg_formatoTempo.setText("Sem espaço!");
+					msg_formatoTempo.setText("Sem espaï¿½o!");
 				} else {
 					Thread adicionar_musica = new Thread(new Adicionar(lock, inUse, notInUse, playlist, nome_musica, nome_artista, duracao_msc));
 					adicionar_musica.start();
@@ -262,17 +271,17 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 				deleteSongText = true;
 				deleteArtistText = true;
 				deleteDuracaoMusica = true;
-				nomeMusica.setText("Música");
+				nomeMusica.setText("Mï¿½sica");
 				nomeArtista.setText("Artista");
-				duracaoMusica.setText("Duração");
+				duracaoMusica.setText("Duraï¿½ï¿½o");
 			} catch (NumberFormatException e1) {
 				deleteSongText = true;
 				deleteArtistText = true;
 				deleteDuracaoMusica = true;
-				nomeMusica.setText("Música");
+				nomeMusica.setText("Mï¿½sica");
 				nomeArtista.setText("Artista");
-				duracaoMusica.setText("Duração");
-				msg_formatoTempo.setText("Apenas números no formato x.y!");
+				duracaoMusica.setText("Duraï¿½ï¿½o");
+				msg_formatoTempo.setText("Apenas nï¿½meros no formato x.y!");
 			}
 		} else if (command.equals("rem_act")) { //remover
 			String num_musica = indexMusica.getText();
@@ -280,19 +289,19 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 			try {
 				int num_musica_int = Integer.parseInt(num_musica);
 				if (num_musica_int == msc_atual) {
-					msg_apenasNumeros.setText("Não é possível remover a música selecionada");
+					msg_apenasNumeros.setText("Nï¿½o ï¿½ possï¿½vel remover a mï¿½sica selecionada");
 				} else if (num_musica_int < 0 || num_musica_int >= playlist.getCurrSize()){
-					msg_apenasNumeros.setText("Música inexistente");
+					msg_apenasNumeros.setText("Mï¿½sica inexistente");
 				} else {
 					Thread remover_musica = new Thread(new Remover(lock, inUse, notInUse, playlist, num_musica_int, msc_atual));
 					remover_musica.start();
 				}
 				deleteIndexText = true;
-				indexMusica.setText("Número da música que deseja remover");
+				indexMusica.setText("Nï¿½mero da mï¿½sica que deseja remover");
 			} catch (NumberFormatException e1) {
 				deleteIndexText = true;
-				indexMusica.setText("Número da música para remover");
-				msg_apenasNumeros.setText("Apenas números!");
+				indexMusica.setText("Nï¿½mero da mï¿½sica para remover");
+				msg_apenasNumeros.setText("Apenas nï¿½meros!");
 			}
 		} else if (command.equals("playpause_act")) { //play-pause
 			if (!play) { 
@@ -300,7 +309,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 				if (playlist.getCurrSize() == 0) { //lista vazia
 					msc_atual = -1;
 				} else {
-					if (msc_atual == -1) //inicia a execução na musica zero. para trocar, apenas selecionando ANTERIOR ou PRÓXIMO
+					if (msc_atual == -1) //inicia a execuï¿½ï¿½o na musica zero. para trocar, apenas selecionando ANTERIOR ou PRï¿½XIMO
 						msc_atual = 0;
 					new Thread() {
 						public void run() {
@@ -323,7 +332,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 								musicaExecucao.setValue((int) (counter1*100)/tamanho_msc_atual);
 								musicaExecucao.setString(Integer.toString(counter1));
 							}
-							if (!(counter1 < tamanho_msc_atual)) //significa que o tempo da música acabou.
+							if (!(counter1 < tamanho_msc_atual)) //significa que o tempo da mï¿½sica acabou.
 								playagain = true;
 							playpauseButton.setText("PLAY");
 							if (novaMusica) {
@@ -342,9 +351,9 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 				}
 			} else {
 				play = false;
-				novaMusica = playagain; //playagain = true se música tiver acabado. playagain = false se música ainda nao tiver acabado.
+				novaMusica = playagain; //playagain = true se mï¿½sica tiver acabado. playagain = false se mï¿½sica ainda nao tiver acabado.
 			}
-		} else if (command.equals("next_act")) { //próxima música
+		} else if (command.equals("next_act")) { //prï¿½xima mï¿½sica
 			play = false;
 			if (!isShuffle) {
 				if (msc_atual < playlist.getCurrSize() - 1) {
@@ -357,7 +366,7 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 				msc_atual = random.nextInt(playlist.getCurrSize());
 			}
 			novaMusica = true;
-		} else if (command.equals("back_act")) { //música anterior
+		} else if (command.equals("back_act")) { //mï¿½sica anterior
 			play = false;
 			if (!isShuffle) {
 				if (msc_atual <= 0) {
@@ -381,14 +390,19 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 					lista_musicas.setText(musicas);
 				}
 			}.start();
-		} else if (command.equals("shuffle_act")) { //ativar/desativar o modo aleatório
+		} else if (command.equals("shuffle_act")) { //ativar/desativar o modo aleatï¿½rio
 			if (!isShuffle) {
-				shuffleButton.setText("Modo aleatório ON");
+				shuffleButton.setText("Modo aleatï¿½rio ON");
 				isShuffle = true;
 			} else {
-				shuffleButton.setText("Modo aleatório OFF");
+				shuffleButton.setText("Modo aleatï¿½rio OFF");
 				isShuffle = false;
 			}
+		} else if(command.equals("stop_act")) {
+			counter1 = 0;
+			musicaExecucao.setValue(0);
+			msc_atual = 0;
+			play = false;
 		}
 	}
 
@@ -413,16 +427,16 @@ public class GUI implements ActionListener, ListSelectionListener, FocusListener
 	@Override
 	public void focusLost(FocusEvent e) { //para setar os textos informativos dentro das caixas de entrada
 		if (!nomeMusica.hasFocus() && nomeMusica.getText().equals("")) {
-			nomeMusica.setText("Música");
+			nomeMusica.setText("Mï¿½sica");
 			deleteSongText = true;
 		} else if (!nomeArtista.hasFocus() && nomeArtista.getText().equals("")) {
 			nomeArtista.setText("Artista");
 			deleteArtistText = true;
 		} else if (!indexMusica.hasFocus() && indexMusica.getText().equals("")) {
-			indexMusica.setText("Número da música para remover");
+			indexMusica.setText("Nï¿½mero da mï¿½sica para remover");
 			deleteIndexText = true;
 		} else if (!duracaoMusica.hasFocus() && duracaoMusica.getText().equals("")) {
-			duracaoMusica.setText("Duração");
+			duracaoMusica.setText("Duraï¿½ï¿½o");
 			deleteDuracaoMusica = true;
 		}
 		
